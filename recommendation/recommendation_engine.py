@@ -1,7 +1,6 @@
 import pandas as pd
 
 from planning.goal_planner import (
-    build_portfolio_projection,
     calculate_sip_allocation,
     create_goal_plan,
 )
@@ -207,12 +206,7 @@ def build_recommendation(
     # 6. Build portfolio projection
     # ---------------------------------------------------------
 
-    projection = build_portfolio_projection(
-        monthly_sip=plan["required_monthly_sip"],
-        annual_return=plan["expected_return"],
-        years=plan["horizon_years"],
-        target_amount=plan["target_amount"],
-    )
+    projection = plan["projection"]
 
     # ---------------------------------------------------------
     # 7. Return complete recommendation
@@ -224,3 +218,5 @@ def build_recommendation(
         "recommendations": recommendations,
         "projection": projection,
     }
+
+

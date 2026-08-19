@@ -1,12 +1,18 @@
 from planning.glide_path import (
     get_glide_path,
+    generate_glide_path,
+    generate_monthly_returns_from_glide_path,
 )
+
 from planning.return_assumptions import (
     get_return_assumption,
 )
+
 from planning.sip_calculator import (
     calculate_required_sip,
+    calculate_required_sip_variable_return,
     generate_scenario_projections,
+    generate_projection_variable_return,
 )
 
 
@@ -35,20 +41,37 @@ def create_goal_plan(
         horizon_years,
     )
 
+    glide_path = generate_glide_path(
+        risk_profile=risk_profile,
+        horizon_years=horizon_years,
+    )
+
+    monthly_returns = (
+        generate_monthly_returns_from_glide_path(
+            risk_profile=risk_profile,
+            horizon_years=horizon_years,
+        )
+    )
+    
+
     expected_return = get_return_assumption(
         allocation
     )
 
-    required_sip = calculate_required_sip(
-        target_amount,
-        expected_return,
-        horizon_years,
+    required_sip = calculate_required_sip_variable_return(
+        target_amount=target_amount,
+        monthly_returns=monthly_returns,
     )
 
     scenario_projections = generate_scenario_projections(
         monthly_sip=required_sip,
         base_return=expected_return,
         years=horizon_years,
+    )
+
+    projection = generate_projection_variable_return(
+        monthly_sip=required_sip,
+        monthly_returns=monthly_returns,
     )
 
 
@@ -58,9 +81,12 @@ def create_goal_plan(
         "horizon_years": horizon_years,
         "risk_profile": risk_profile,
         "allocation": allocation,
+        "glide_path": glide_path,
         "expected_return": expected_return,
+        "monthly_returns": monthly_returns,
         "required_monthly_sip": required_sip,
         "scenario_projections": scenario_projections,
+        "projection": projection,
     }
 
 
