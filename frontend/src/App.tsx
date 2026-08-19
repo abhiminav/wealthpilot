@@ -28,6 +28,7 @@ type Fund = {
   volatility: number;
   sharpe_ratio: number;
   max_drawdown: number;
+  explanation: string[];
 };
 
 type ProjectionPoint = {
@@ -38,6 +39,16 @@ type ProjectionPoint = {
   target_amount: number;
   surplus_or_gap: number;
 };
+
+type ScenarioProjection = {
+  annual_return: number;
+  projection: ProjectionPoint[];
+};
+
+type ScenarioProjections = Record<
+  "conservative" | "base" | "optimistic",
+  ScenarioProjection
+>;
 
 type Recommendation = {
   goal_type: string;
@@ -50,6 +61,7 @@ type Recommendation = {
   sip_allocation: Record<string, number>;
   recommendations: Record<string, Fund[]>;
   projection: ProjectionPoint[];
+  scenario_projections: ScenarioProjections;
 };
 
 function formatCurrency(value: number) {
@@ -512,10 +524,10 @@ const [riskProfile, setRiskProfile] = useState<
                       `Year ${Number(value).toFixed(1)}`
                     }
                     formatter={(
-                      value: number | undefined,
-                      name: string | undefined
+                      value,
+                      name
                     ) => [
-                      formatCurrency(value ?? 0),
+                      formatCurrency(Number(value ?? 0)),
                       name === "portfolio_value"
                         ? "Portfolio"
                         : "Invested",
@@ -728,11 +740,12 @@ const [riskProfile, setRiskProfile] = useState<
 
                         <div className="fund-explanation">
                           <span>Why it was selected</span>
-                          <p>
-                            Selected based on its overall fund score,
-                            historical performance, volatility,
-                            risk-adjusted returns, and maximum drawdown.
-                          </p>
+
+                          <ul>
+                            {fund.explanation.map((reason) => (
+                              <li key={reason}>{reason}</li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
 
