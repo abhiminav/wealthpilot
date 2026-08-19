@@ -50,6 +50,12 @@ type ScenarioProjections = Record<
   ScenarioProjection
 >;
 
+type GlidePathStage = {
+  stage: string;
+  year: number;
+  allocation: Record<string, number>;
+};
+
 type Recommendation = {
   goal_type: string;
   target_amount: number;
@@ -62,6 +68,7 @@ type Recommendation = {
   recommendations: Record<string, Fund[]>;
   projection: ProjectionPoint[];
   scenario_projections: ScenarioProjections;
+  glide_path: GlidePathStage[];
 };
 
 function formatCurrency(value: number) {
@@ -433,6 +440,137 @@ const [riskProfile, setRiskProfile] = useState<
                 ))}
               </div>
             </div>
+          </section>
+          
+          <section className="result-card glide-path-card">
+            <CardHeading
+              title="Portfolio glide path"
+              subtitle="Your portfolio gradually becomes more defensive as your goal approaches"
+            />
+
+            <div className="glide-path-chart">
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart
+                  data={result.glide_path}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 5,
+                    bottom: 5,
+                  }}
+                >
+                  <XAxis
+                    dataKey="year"
+                    tickFormatter={(value) =>
+                      value === 0
+                        ? "Today"
+                        : `${Number(value).toFixed(1)}y`
+                    }
+                    stroke="#555b67"
+                    tick={{
+                      fill: "#777d89",
+                      fontSize: 11,
+                    }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+
+                  <YAxis
+                    domain={[0, 100]}
+                    tickFormatter={(value) => `${value}%`}
+                    stroke="#555b67"
+                    tick={{
+                      fill: "#777d89",
+                      fontSize: 11,
+                    }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={45}
+                  />
+
+                  <Tooltip
+                    contentStyle={{
+                      background: "#151820",
+                      border: "1px solid #2a2e38",
+                      borderRadius: "10px",
+                      color: "#fff",
+                    }}
+                    labelFormatter={(value) =>
+                      value === 0
+                        ? "Today"
+                        : `Year ${Number(value).toFixed(1)}`
+                    }
+                    formatter={(value, name) => [
+                      `${Number(value ?? 0).toFixed(0)}%`,
+                      name,
+                    ]}
+                  />
+
+                  <Line
+                    type="monotone"
+                    dataKey="allocation.Equity"
+                    name="Equity"
+                    stroke="#9588ff"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                  />
+
+                  <Line
+                    type="monotone"
+                    dataKey="allocation.Debt"
+                    name="Debt"
+                    stroke="#4f5663"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                  />
+
+                  <Line
+                    type="monotone"
+                    dataKey="allocation.Gold"
+                    name="Gold"
+                    stroke="#c9a227"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="glide-path-stages">
+              {result.glide_path.map((stage) => (
+                <div
+                  className="glide-stage"
+                  key={`${stage.stage}-${stage.year}`}
+                >
+                  <div className="glide-stage-header">
+                    <strong>{stage.stage}</strong>
+
+                    <span>
+                      {stage.year === 0
+                        ? "Today"
+                        : `Year ${stage.year.toFixed(1)}`}
+                    </span>
+                  </div>
+
+                  <div className="glide-stage-allocation">
+                    {Object.entries(stage.allocation).map(
+                      ([asset, percentage]) => (
+                        <div key={asset}>
+                          <span>{asset}</span>
+                          <strong>{percentage}%</strong>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="glide-path-note">
+              The plan starts with an allocation suited to your risk
+              profile and gradually reduces equity exposure as the goal
+              gets closer.
+            </p>
           </section>
 
           <section className="result-card projection-card">

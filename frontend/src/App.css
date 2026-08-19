@@ -1829,3 +1829,92 @@ footer span:first-child {
     flex-direction: column;
   }
 }
+
+/* =========================================================
+   Portfolio Glide Path
+   ========================================================= */
+
+.glide-path-card {
+  margin-top: 24px;
+}
+
+.glide-path-chart {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.glide-path-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.glide-stage {
+  padding: 14px;
+  border: 1px solid #262a34;
+  border-radius: 12px;
+  background: #11141b;
+}
+
+.glide-stage-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.glide-stage-header strong {
+  font-size: 13px;
+  color: #f4f5f7;
+}
+
+.glide-stage-header span {
+  font-size: 11px;
+  color: #777d89;
+}
+
+.glide-stage-allocation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.glide-stage-allocation div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.glide-stage-allocation span {
+  font-size: 10px;
+  color: #777d89;
+}
+
+.glide-stage-allocation strong {
+  font-size: 14px;
+  color: #f4f5f7;
+}
+
+.glide-path-note {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #252933;
+  color: #777d89;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+  .glide-path-stages {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .glide-path-stages {
+    grid-template-columns: 1fr;
+  }
+}
