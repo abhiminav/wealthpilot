@@ -1,0 +1,11 @@
+pandas
+numpy
+plotly
+streamlit
+requests
+beautifulsoup4
+mftool
+python-dotenv
+yfinance
+scipy
+pytest
