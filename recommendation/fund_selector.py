@@ -3,6 +3,9 @@ import pandas as pd
 from recommendation.asset_allocation import (
     get_asset_class_from_fund,
 )
+from recommendation.goal_preferences import (
+    calculate_goal_adjusted_score,
+)
 
 
 CORE_EQUITY_CATEGORIES = {
@@ -83,6 +86,7 @@ def select_funds(
     funds: pd.DataFrame,
     asset_class: str,
     horizon_years: float,
+    goal_type: str,
     n: int = 3,
 ) -> pd.DataFrame:
     """Select suitable funds for an asset class and horizon."""
@@ -110,8 +114,16 @@ def select_funds(
     if df.empty:
         return df
 
+    df["goal_adjusted_score"] = df.apply(
+        lambda row: calculate_goal_adjusted_score(
+            row,
+            goal_type,
+        ),
+        axis=1,
+    )
+
     df["category_rank"] = (
-        df.groupby("category")["fund_score"]
+        df.groupby("category")["goal_adjusted_score"]
         .rank(
             ascending=False,
             method="first",
@@ -121,7 +133,7 @@ def select_funds(
     candidates = (
         df[df["category_rank"] <= 3]
         .sort_values(
-            "fund_score",
+            "goal_adjusted_score",
             ascending=False,
         )
     )

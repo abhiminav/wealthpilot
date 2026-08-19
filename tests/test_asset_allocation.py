@@ -1,6 +1,7 @@
 from planning.glide_path import get_glide_path
 from recommendation.asset_allocation import (
     get_asset_class,
+    get_asset_class_from_fund,
 )
 
 
@@ -33,3 +34,28 @@ def test_long_aggressive_horizon():
         "Debt": 10,
         "Gold": 10,
     }
+
+def test_debt_index_fund_is_classified_as_debt():
+    result = get_asset_class_from_fund(
+        "Index",
+        "Edelweiss CRISIL IBX 50:50 Gilt Plus SDL Short Duration Index fund - Direct Plan - Growth",
+    )
+
+    assert result == "Debt"
+
+
+def test_equity_index_fund_remains_equity():
+    result = get_asset_class_from_fund(
+        "Index",
+        "HDFC Nifty 50 Index Fund - Direct Plan - Growth",
+    )
+
+    assert result == "Equity"    
+
+def test_gsec_index_fund_is_classified_as_debt():
+    result = get_asset_class_from_fund(
+        "Index",
+        "Nippon India Nifty G-Sec Oct 2028 Maturity Index Fund-Direct Plan-Growth Option",
+    )
+
+    assert result == "Debt"

@@ -88,4 +88,23 @@ def get_asset_class_from_fund(
     ):
         return None
 
+    # Some debt index funds are classified simply as "Index".
+    # Use explicit debt-related scheme-name signals to
+    # distinguish them from equity index funds.
+    if category == "Index":
+        debt_index_terms = (
+            "GILT",
+            "SDL",
+            "BOND",
+            "PSU",
+            "G-SEC",
+            "GSEC",
+        )
+
+        if any(
+            term in name
+            for term in debt_index_terms
+        ):
+            return "Debt"
+
     return get_asset_class(category)

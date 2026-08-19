@@ -142,6 +142,7 @@ def build_recommendation(
             asset_class=asset_class,
             horizon_years=horizon_years,
             n=funds_per_asset,
+            goal_type=goal_type,
         )
 
         if selected.empty:
