@@ -334,11 +334,10 @@ const [riskProfile, setRiskProfile] = useState<
             />
 
             <Metric
-              label="Expected annual return"
-              value={`${(
-                result.expected_return * 100
-              ).toFixed(1)}%`}
+              label="Planning return assumption"
+              value={`${(result.expected_return * 100).toFixed(1)}%`}
             />
+
 
             <Metric
               label="Equity allocation"
@@ -350,6 +349,10 @@ const [riskProfile, setRiskProfile] = useState<
               value={`${result.horizon_years} years`}
             />
           </section>
+            <p className="return-assumption-note">
+              Planning return assumptions are used to estimate the SIP required
+              for your goal. Actual investment returns may be higher or lower.
+            </p>
 
           <section className="results-grid">
             <div className="result-card allocation-card">
@@ -571,6 +574,69 @@ const [riskProfile, setRiskProfile] = useState<
               </div>
             </div>
           </section>
+
+          <section className="result-card scenario-card">
+              <CardHeading
+                title="Scenario projections"
+                subtitle="How your goal could perform under different return assumptions"
+              />
+
+              <div className="scenario-grid">
+                {Object.entries(
+                  result.scenario_projections
+                ).map(([scenario, data]) => {
+                  const finalProjection =
+                    data.projection[
+                      data.projection.length - 1
+                    ];
+
+                  const labels: Record<
+                    string,
+                    string
+                  > = {
+                    conservative: "Conservative",
+                    base: "Base case",
+                    optimistic: "Optimistic",
+                  };
+
+                  return (
+                    <div
+                      className={`scenario-item ${scenario}`}
+                      key={scenario}
+                    >
+                      <div className="scenario-header">
+                        <span>
+                          {labels[scenario]}
+                        </span>
+
+                        <strong>
+                          {(data.annual_return * 100).toFixed(
+                            1
+                          )}
+                          %
+                        </strong>
+                      </div>
+
+                      <div className="scenario-value">
+                        {formatCurrency(
+                          finalProjection.portfolio_value
+                        )}
+                      </div>
+
+                      <span className="scenario-label">
+                        Projected value
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <p className="scenario-note">
+                These projections illustrate a range of
+                possible outcomes using the same monthly SIP.
+                Actual returns may vary and are not guaranteed.
+              </p>
+            </section>
 
           <section className="result-card funds-section">
             <CardHeading

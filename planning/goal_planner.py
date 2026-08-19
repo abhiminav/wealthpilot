@@ -6,6 +6,7 @@ from planning.return_assumptions import (
 )
 from planning.sip_calculator import (
     calculate_required_sip,
+    generate_scenario_projections,
 )
 
 
@@ -44,6 +45,13 @@ def create_goal_plan(
         horizon_years,
     )
 
+    scenario_projections = generate_scenario_projections(
+        monthly_sip=required_sip,
+        base_return=expected_return,
+        years=horizon_years,
+    )
+
+
     return {
         "goal_type": goal_type,
         "target_amount": target_amount,
@@ -52,6 +60,7 @@ def create_goal_plan(
         "allocation": allocation,
         "expected_return": expected_return,
         "required_monthly_sip": required_sip,
+        "scenario_projections": scenario_projections,
     }
 
 

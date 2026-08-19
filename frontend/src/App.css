@@ -1477,3 +1477,97 @@ footer span:first-child {
     margin-left: auto;
   }
 }
+
+/* =========================================================
+   Scenario Projections
+   ========================================================= */
+
+.scenario-card {
+  margin-top: 24px;
+}
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.scenario-item {
+  padding: 20px;
+  border: 1px solid #2a2e38;
+  border-radius: 14px;
+  background: #11141b;
+  min-width: 0;
+}
+
+.scenario-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.scenario-header span {
+  color: #aeb3bd;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.scenario-header strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.scenario-value {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 5px;
+}
+
+.scenario-label {
+  color: #777d89;
+  font-size: 12px;
+}
+
+.scenario-item.conservative {
+  border-top: 3px solid #6f7683;
+}
+
+.scenario-item.base {
+  border-top: 3px solid #9588ff;
+}
+
+.scenario-item.optimistic {
+  border-top: 3px solid #65b891;
+}
+
+.scenario-item.conservative .scenario-header strong {
+  color: #b5bbc5;
+}
+
+.scenario-item.base .scenario-header strong {
+  color: #9588ff;
+}
+
+.scenario-item.optimistic .scenario-header strong {
+  color: #65b891;
+}
+
+.scenario-note {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #252932;
+  color: #777d89;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .scenario-grid {
+    grid-template-columns: 1fr;
+  }
+}

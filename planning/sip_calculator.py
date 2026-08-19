@@ -83,3 +83,32 @@ def generate_projection(
         })
 
     return projection
+
+
+def generate_scenario_projections(
+    monthly_sip: float,
+    base_return: float,
+    years: float,
+) -> dict:
+    """
+    Generate conservative, base, and optimistic
+    portfolio projections using the same monthly SIP.
+    """
+
+    scenarios = {
+        "conservative": base_return - 0.02,
+        "base": base_return,
+        "optimistic": base_return + 0.02,
+    }
+
+    return {
+        name: {
+            "annual_return": annual_return,
+            "projection": generate_projection(
+                monthly_sip=monthly_sip,
+                annual_return=annual_return,
+                years=years,
+            ),
+        }
+        for name, annual_return in scenarios.items()
+    }
