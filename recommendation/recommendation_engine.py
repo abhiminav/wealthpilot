@@ -13,6 +13,73 @@ from recommendation.fund_selector import (
 )
 
 
+def build_fund_explanation(
+    fund,
+    asset_class: str,
+    horizon_years: float,
+    allocation: float,
+) -> list[str]:
+    """Generate transparent reasons for a fund recommendation."""
+
+    reasons = []
+
+    # Category-relative score
+    if fund["fund_score"] >= 85:
+        reasons.append(
+            "Strong category-relative fund score"
+        )
+    elif fund["fund_score"] >= 70:
+        reasons.append(
+            "Good category-relative fund score"
+        )
+    else:
+        reasons.append(
+            "Competitive category-relative fund score"
+        )
+
+    # Sharpe ratio
+    if fund["sharpe_ratio"] >= 1.5:
+        reasons.append(
+            "Strong risk-adjusted performance"
+        )
+    elif fund["sharpe_ratio"] >= 1.0:
+        reasons.append(
+            "Good risk-adjusted performance"
+        )
+
+    # Volatility
+    if fund["volatility"] <= 0.08:
+        reasons.append(
+            "Relatively low historical volatility"
+        )
+    elif fund["volatility"] <= 0.15:
+        reasons.append(
+            "Moderate historical volatility"
+        )
+
+    # Drawdown
+    if fund["max_drawdown"] >= -0.10:
+        reasons.append(
+            "Limited historical maximum drawdown"
+        )
+    elif fund["max_drawdown"] >= -0.20:
+        reasons.append(
+            "Moderate historical drawdown"
+        )
+
+    # Horizon / allocation
+    reasons.append(
+        f"Suitable for your {horizon_years:g}-year investment horizon"
+    )
+
+    reasons.append(
+        f"Selected for the {allocation:.0f}% "
+        f"{asset_class.lower()} allocation"
+    )
+
+    return reasons
+
+
 def build_recommendation(
     funds: pd.DataFrame,
     goal_type: str,
@@ -81,7 +148,7 @@ def build_recommendation(
             recommendations[asset_class] = []
             continue
 
-        recommendations[asset_class] = (
+        fund_records = (
             selected[
                 [
                     "scheme_code",
@@ -97,6 +164,16 @@ def build_recommendation(
             ]
             .to_dict("records")
         )
+
+        for fund in fund_records:
+            fund["explanation"] = build_fund_explanation(
+                fund=fund,
+                asset_class=asset_class,
+                horizon_years=horizon_years,
+                allocation=allocation,
+            )
+
+        recommendations[asset_class] = fund_records
 
     # ---------------------------------------------------------
     # 4. Validate fund availability
