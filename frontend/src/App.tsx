@@ -648,6 +648,127 @@ const [riskProfile, setRiskProfile] = useState<
                 possible outcomes using the same monthly SIP.
                 Actual returns may vary and are not guaranteed.
               </p>
+
+              </section>
+
+              <section className="result-card action-plan-card">
+                <CardHeading
+                  title="Your investment plan"
+                  subtitle="A practical breakdown of the recommended portfolio"
+                />
+
+                <div className="action-plan-summary">
+                  <div>
+                    <span>Monthly SIP</span>
+                    <strong>
+                      {formatCurrency(
+                        result.required_monthly_sip
+                      )}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Target</span>
+                    <strong>
+                      {formatCurrency(
+                        result.target_amount
+                      )}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Horizon</span>
+                    <strong>
+                      {result.horizon_years} years
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Risk profile</span>
+                    <strong>
+                      {result.risk_profile}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="action-plan-allocation">
+                  <div className="action-plan-heading">
+                    <strong>Monthly SIP allocation</strong>
+                    <span>
+                      {formatCurrency(
+                        result.required_monthly_sip
+                      )}{" "}
+                      per month
+                    </span>
+                  </div>
+
+                  <div className="action-plan-bars">
+                    {Object.entries(
+                      result.sip_allocation
+                    ).map(([asset, amount]) => {
+                      const percentage =
+                        result.allocation[asset] ?? 0;
+
+                      return (
+                        <div
+                          className="action-plan-asset"
+                          key={asset}
+                        >
+                          <div className="action-plan-asset-header">
+                            <span>
+                              <i
+                                className={`allocation-dot ${asset.toLowerCase()}`}
+                              />
+                              {asset}
+                            </span>
+
+                            <strong>
+                              {formatCurrency(amount)}
+                            </strong>
+                          </div>
+
+                          <div className="action-plan-track">
+                            <div
+                              className={`action-plan-fill ${asset.toLowerCase()}`}
+                              style={{
+                                width: `${percentage}%`,
+                              }}
+                            />
+                          </div>
+
+                          <span className="action-plan-percentage">
+                            {percentage}% of portfolio
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="action-plan-note">
+                  <strong>What this means</strong>
+
+                  <p>
+                    Based on your{" "}
+                    {result.horizon_years}-year horizon and{" "}
+                    {result.risk_profile.toLowerCase()} risk
+                    profile, the plan targets{" "}
+                    {formatCurrency(
+                      result.target_amount
+                    )} with a monthly SIP of{" "}
+                    {formatCurrency(
+                      result.required_monthly_sip
+                    )}
+                    .
+                  </p>
+
+                  <p>
+                    The portfolio allocation is designed
+                    to balance growth, stability, and
+                    diversification. The projected
+                    returns are assumptions, not guarantees.
+                  </p>
+                </div>
             </section>
 
           <section className="result-card funds-section">
