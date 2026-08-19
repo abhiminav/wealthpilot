@@ -641,9 +641,28 @@ const [riskProfile, setRiskProfile] = useState<
           <section className="result-card funds-section">
             <CardHeading
               title="Recommended funds"
-              subtitle="Selected using your risk profile and fund metrics"
+              subtitle="Selected using category-relative performance and risk-adjusted fund metrics"
               icon={<CheckCircle2 size={20} />}
             />
+
+            <div className="scoring-methodology">
+              <strong>How funds are scored</strong>
+
+              <p>
+                Funds are compared with peers in the same category
+                using CAGR, Sharpe ratio, volatility, and maximum
+                drawdown. Categories with fewer funds receive a
+                lower-confidence adjustment to avoid overstating
+                small-sample rankings.
+              </p>
+
+              <div className="scoring-weights">
+                <span>CAGR 30%</span>
+                <span>Sharpe 30%</span>
+                <span>Volatility 20%</span>
+                <span>Drawdown 20%</span>
+              </div>
+            </div>
 
             <div className="fund-groups">
               {Object.entries(

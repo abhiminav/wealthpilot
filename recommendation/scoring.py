@@ -54,11 +54,26 @@ def calculate_category_scores(
             group["max_drawdown"]
         )
 
-        group["fund_score"] = (
+        group["raw_fund_score"] = (
             group["cagr_score"] * 0.30
             + group["sharpe_score"] * 0.30
             + group["volatility_score"] * 0.20
             + group["drawdown_score"] * 0.20
+        )
+
+        category_size = len(group)
+
+        category_confidence = min(
+            1.0,
+            (category_size - 1) / 9,
+        )
+
+        group["category_confidence"] = category_confidence
+
+        group["fund_score"] = (
+            50
+            + category_confidence
+            * (group["raw_fund_score"] - 50)
         )
 
         return group
