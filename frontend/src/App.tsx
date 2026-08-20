@@ -240,6 +240,7 @@ const [riskProfile, setRiskProfile] = useState<
   async function generatePlan() {
     setLoading(true);
     setError("");
+    setResult(null);
 
     try {
       const response = await fetch(
@@ -250,16 +251,24 @@ const [riskProfile, setRiskProfile] = useState<
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-          goal_type: goal,
-          target_amount: Number(target),
-          horizon_years: Number(horizon),
-          risk_profile: riskProfile,
-          funds_per_asset: 2,
-        }),
+            goal_type: goal,
+            target_amount: Number(target),
+            horizon_years: Number(horizon),
+            risk_profile: riskProfile,
+            funds_per_asset: 2,
+          }),
         }
       );
 
-      const data = await response.json();
+      let data;
+
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(
+          "The server returned an invalid response."
+        );
+      }
 
       if (!response.ok) {
         throw new Error(
@@ -273,7 +282,7 @@ const [riskProfile, setRiskProfile] = useState<
       setError(
         err instanceof Error
           ? err.message
-          : "Something went wrong."
+          : "Unable to generate your investment plan."
       );
     } finally {
       setLoading(false);
@@ -1347,6 +1356,12 @@ function RiskQuestionnaire({
               </strong>
             </div>
           </div>
+          
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
 
           <div className="risk-actions">
             <button

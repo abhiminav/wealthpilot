@@ -1,10 +1,27 @@
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from recommendation.service import (
     generate_recommendation,
 )
-from fastapi.middleware.cors import CORSMiddleware
+
+
+GoalType = Literal[
+    "Emergency Fund",
+    "House Down Payment",
+    "Education",
+    "Retirement",
+    "Wealth Creation",
+]
+
+RiskProfile = Literal[
+    "Conservative",
+    "Moderate",
+    "Aggressive",
+]
 
 
 app = FastAPI(
@@ -15,25 +32,21 @@ app = FastAPI(
     ),
     version="1.0.0",
 )
-app = FastAPI(
-    title="Goal-Based Robo-Advisor API",
-    description="Investment planning and mutual fund recommendation API.",
-    version="1.0.0",
-)
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
 class RecommendationRequest(BaseModel):
-    goal_type: str = Field(
-        ...,
-        min_length=1,
-    )
+    goal_type: GoalType
 
     target_amount: float = Field(
         ...,
@@ -45,10 +58,7 @@ class RecommendationRequest(BaseModel):
         gt=0,
     )
 
-    risk_profile: str = Field(
-        ...,
-        min_length=1,
-    )
+    risk_profile: RiskProfile
 
     funds_per_asset: int = Field(
         default=2,
