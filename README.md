@@ -41,6 +41,20 @@ The project is built as a full-stack application with a Python/FastAPI backend a
 
 ---
 
+## 🚀 Live Demo
+
+**Live Application:**  
+https://wealthpilot-iota.vercel.app/
+
+**Backend API:**  
+https://wealthpilot-2929.onrender.com/
+
+**API Documentation:**  
+https://wealthpilot-2929.onrender.com/docs
+
+> The frontend is deployed on Vercel and the FastAPI backend is deployed on Render.
+
+
 ## Key Features
 
 ### 🎯 Goal-Based Investment Planning
@@ -904,7 +918,7 @@ Make sure the following are installed:
 ## 1. Clone the Repository
 
 ```bash
-git clone <your-github-repository-url>
+git clone https://github.com/abhiminav/wealthpilot
 cd mutual-fund-robo-advisor
 ```
 
@@ -1348,28 +1362,23 @@ Planned improvements for future versions include:
 
 ## Project Status
 
-### Version 1 — Complete
+### Version 1 — Complete ✅
 
-The current version includes:
+WealthPilot V1 is fully implemented, tested, and deployed.
 
-- Goal-based investment planning
-- Risk profiling
+- Complete goal-based investment planning pipeline
+- Risk assessment and profiling
 - Dynamic asset allocation
 - Portfolio glide paths
 - Variable-return SIP calculations
 - Scenario projections
-- Category-relative fund scoring
-- Goal-adjusted fund scoring
-- Fund selection
+- Goal-aware mutual fund selection
 - Explainable recommendations
 - FastAPI backend
 - React + TypeScript frontend
-- Automated testing
-- Production frontend build
-
-The application has been tested end-to-end locally.
-
----
+- Automated test suite
+- Production deployment
+- Live frontend and backend
 
 ## Why I Built This
 
@@ -1401,6 +1410,18 @@ Interested in:
 - Financial Technology
 
 ---
+
+## 🌐 Deployment
+
+| Component | Platform | Status |
+|---|---|---|
+| Frontend | Vercel | 🟢 Live |
+| Backend API | Render | 🟢 Live |
+| Source Code | GitHub | 🟢 Public |
+
+**Live Application:** https://wealthpilot-iota.vercel.app/
+
+**API:** https://wealthpilot-2929.onrender.com/
 
 ## Disclaimer
 
