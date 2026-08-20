@@ -22,7 +22,33 @@ def build_fund_explanation(
 
     reasons = []
 
-    # Category-relative score
+    # ---------------------------------------------------------
+    # Goal-adjusted score
+    # ---------------------------------------------------------
+
+    goal_score = fund["goal_adjusted_score"]
+
+    if goal_score >= 90:
+        reasons.append(
+            "Excellent fit for your investment goal"
+        )
+    elif goal_score >= 80:
+        reasons.append(
+            "Strong fit for your investment goal"
+        )
+    elif goal_score >= 70:
+        reasons.append(
+            "Good fit for your investment goal"
+        )
+    else:
+        reasons.append(
+            "Competitive fit for your investment goal"
+        )
+
+    # ---------------------------------------------------------
+    # Category-relative fund score
+    # ---------------------------------------------------------
+
     if fund["fund_score"] >= 85:
         reasons.append(
             "Strong category-relative fund score"
@@ -36,7 +62,10 @@ def build_fund_explanation(
             "Competitive category-relative fund score"
         )
 
+    # ---------------------------------------------------------
     # Sharpe ratio
+    # ---------------------------------------------------------
+
     if fund["sharpe_ratio"] >= 1.5:
         reasons.append(
             "Strong risk-adjusted performance"
@@ -46,7 +75,10 @@ def build_fund_explanation(
             "Good risk-adjusted performance"
         )
 
+    # ---------------------------------------------------------
     # Volatility
+    # ---------------------------------------------------------
+
     if fund["volatility"] <= 0.08:
         reasons.append(
             "Relatively low historical volatility"
@@ -56,7 +88,10 @@ def build_fund_explanation(
             "Moderate historical volatility"
         )
 
-    # Drawdown
+    # ---------------------------------------------------------
+    # Maximum drawdown
+    # ---------------------------------------------------------
+
     if fund["max_drawdown"] >= -0.10:
         reasons.append(
             "Limited historical maximum drawdown"
@@ -66,10 +101,17 @@ def build_fund_explanation(
             "Moderate historical drawdown"
         )
 
-    # Horizon / allocation
+    # ---------------------------------------------------------
+    # Investment horizon
+    # ---------------------------------------------------------
+
     reasons.append(
         f"Suitable for your {horizon_years:g}-year investment horizon"
     )
+
+    # ---------------------------------------------------------
+    # Asset allocation
+    # ---------------------------------------------------------
 
     reasons.append(
         f"Selected for the {allocation:.0f}% "
@@ -99,7 +141,7 @@ def build_recommendation(
     - Expected return
     - Required SIP
     - Fund scoring
-    - Fund selection
+    - Goal-adjusted fund selection
     - SIP allocation
     - Portfolio projection
     """
@@ -156,6 +198,7 @@ def build_recommendation(
                     "fund_house",
                     "category",
                     "fund_score",
+                    "goal_adjusted_score",
                     "cagr",
                     "volatility",
                     "sharpe_ratio",
@@ -165,7 +208,12 @@ def build_recommendation(
             .to_dict("records")
         )
 
+        # -----------------------------------------------------
+        # 4. Build explanation for each selected fund
+        # -----------------------------------------------------
+
         for fund in fund_records:
+
             fund["explanation"] = build_fund_explanation(
                 fund=fund,
                 asset_class=asset_class,
@@ -176,7 +224,7 @@ def build_recommendation(
         recommendations[asset_class] = fund_records
 
     # ---------------------------------------------------------
-    # 4. Validate fund availability
+    # 5. Validate fund availability
     # ---------------------------------------------------------
 
     missing_assets = [
@@ -194,7 +242,7 @@ def build_recommendation(
         )
 
     # ---------------------------------------------------------
-    # 5. Calculate SIP allocation by asset class
+    # 6. Calculate SIP allocation by asset class
     # ---------------------------------------------------------
 
     sip_allocation = calculate_sip_allocation(
@@ -203,13 +251,13 @@ def build_recommendation(
     )
 
     # ---------------------------------------------------------
-    # 6. Build portfolio projection
+    # 7. Use glide-path-aware portfolio projection
     # ---------------------------------------------------------
 
     projection = plan["projection"]
 
     # ---------------------------------------------------------
-    # 7. Return complete recommendation
+    # 8. Return complete recommendation
     # ---------------------------------------------------------
 
     return {
@@ -218,5 +266,3 @@ def build_recommendation(
         "recommendations": recommendations,
         "projection": projection,
     }
-
-

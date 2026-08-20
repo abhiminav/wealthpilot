@@ -24,6 +24,7 @@ type Fund = {
   fund_house: string;
   category: string;
   fund_score: number;
+  goal_adjusted_score: number;
   cagr: number;
   volatility: number;
   sharpe_ratio: number;
@@ -1009,10 +1010,21 @@ const [riskProfile, setRiskProfile] = useState<
                       </div>
 
                       <div className="fund-score">
-                        <strong>
-                          {fund.fund_score.toFixed(1)}
-                        </strong>
-                        <span>Score</span>
+                        <div className="fund-score-item">
+                          <strong>
+                            {fund.goal_adjusted_score.toFixed(1)}
+                          </strong>
+                          <span>Goal Fit</span>
+                        </div>
+
+                        <div className="fund-score-divider" />
+
+                        <div className="fund-score-item">
+                          <strong>
+                            {fund.fund_score.toFixed(1)}
+                          </strong>
+                          <span>Fund Score</span>
+                        </div>
                       </div>
                     </div>
                     ))}
